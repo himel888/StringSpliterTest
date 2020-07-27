@@ -10,22 +10,13 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak private var dataPresenterTxtView: UITextView!
+    @IBOutlet weak private var loader: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getData { (str) in
-            guard let lStr = str, !lStr.isEmpty else {
-                print("No data found")
-                return
-            }
-            
-            print("Found String Data: \(lStr)")
-            print("\n========================================\n")
-            print("Last Character is: \(lStr.last!)")
-            
-            print("\n========================================\n")
-            print("Every 10th Characters are: \(lStr.getCharacters(fromStartingIndex: 10))")
-        }
+        dataPresenterTxtView.isEditable = false
     }
 
     private func getData(completion: @escaping(String?) -> Void) {
@@ -44,6 +35,21 @@ class ViewController: UIViewController {
             
             completion(String(data: lData, encoding: .utf8))
         }.resume()
+    }
+    
+    @IBAction
+    private func btnPresentDataAction(_ sender: UIButton) {
+        
+        loader.startAnimating()
+        getData { (str) in
+            let vm = MainVCViewModel()
+            vm.getPresentableText(fromText: str ?? "") { (presentableText) in
+                DispatchQueue.main.async {
+                    self.loader.stopAnimating()
+                    self.dataPresenterTxtView.text = presentableText
+                }
+            }
+        }
     }
 }
 

@@ -14,7 +14,7 @@
 		4E2C53D424CE034E00024BFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C53D324CE034E00024BFB /* Assets.xcassets */; };
 		4E2C53D724CE034E00024BFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E2C53D524CE034E00024BFB /* LaunchScreen.storyboard */; };
 		4E2C53E224CE034F00024BFB /* StringSpliterTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2C53E124CE034F00024BFB /* StringSpliterTestTests.swift */; };
-		4E2C53ED24CE04FF00024BFB /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E2C53EC24CE04FF00024BFB /* String+Extension.swift */; };
+		4E44D77224CF57310017985F /* MainVCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E44D77124CF57310017985F /* MainVCViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +39,7 @@
 		4E2C53DD24CE034F00024BFB /* StringSpliterTestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StringSpliterTestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E2C53E124CE034F00024BFB /* StringSpliterTestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringSpliterTestTests.swift; sourceTree = "<group>"; };
 		4E2C53E324CE034F00024BFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4E2C53EC24CE04FF00024BFB /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		4E44D77124CF57310017985F /* MainVCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVCViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +88,7 @@
 				4E2C53D324CE034E00024BFB /* Assets.xcassets */,
 				4E2C53D524CE034E00024BFB /* LaunchScreen.storyboard */,
 				4E2C53D824CE034E00024BFB /* Info.plist */,
-				4E2C53EC24CE04FF00024BFB /* String+Extension.swift */,
+				4E44D77124CF57310017985F /* MainVCViewModel.swift */,
 			);
 			path = StringSpliterTest;
 			sourceTree = "<group>";
@@ -203,9 +203,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E2C53ED24CE04FF00024BFB /* String+Extension.swift in Sources */,
 				4E2C53CF24CE034D00024BFB /* ViewController.swift in Sources */,
 				4E2C53CB24CE034D00024BFB /* AppDelegate.swift in Sources */,
+				4E44D77224CF57310017985F /* MainVCViewModel.swift in Sources */,
 				4E2C53CD24CE034D00024BFB /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
