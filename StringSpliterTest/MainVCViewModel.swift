@@ -10,13 +10,16 @@ import Foundation
 
 class MainVCViewModel {
     
-    var data = ""
+    let text:String
     
-    /// Generates collection of characters on every nth position.
+    init(_ text: String) {
+        self.text = text
+    }
+    
+    /// Generates collection of characters on every nth position from member variable text which is String type.
     /// - Parameter fromStartingIndex: starting index and then will increase by index+index
-    /// - Parameter ofText: String from where charcters will extract
     /// - Returns: Array of characters that found in every nth index, could be empty also
-    func getCharacters(ofText text: String, fromStartingIndex index: Int,  dispatchGroup: DispatchGroup? = nil, completion: ([String]) -> Void) {
+    func getCharacters(fromStartingIndex index: Int,  dispatchGroup: DispatchGroup? = nil, completion: ([String]) -> Void) {
         if let group = dispatchGroup { group.enter() }
         var results = [String]()
         var offsetBy = index
@@ -32,7 +35,11 @@ class MainVCViewModel {
         completion(results)
     }
     
-    func getWords(fromText text: String) -> [String] {
+    
+    /// Search for word in member variable text, ignoring non letter and single character,
+    /// can contains redundent word.
+    /// - Returns: Array of word found is search
+    func getWords() -> [String] {
         
         let wordsSubStr = text.split{ !$0.isLetter }
         
@@ -45,53 +52,68 @@ class MainVCViewModel {
         return wordsStr
     }
     
-    func getWordOccurences(fromText text: String, dispatchGroup: DispatchGroup? = nil, completion: ([String: Int]) -> Void) {
+    
+    /// Calculates number of occurences of words found in text of member variable
+    /// - Parameters:
+    ///   - dispatchGroup: Pass a dispatch group if you want to run this method in a group with other task asynchronously else pass nill or ignore it.
+    ///   - completion: Using this closure to return result as if Dispatch group passed we can leave from group after completion of task.
+    func getWordOccurences(dispatchGroup: DispatchGroup? = nil, completion: ([String: Int]) -> Void) {
         
         if let group = dispatchGroup { group.enter() }
-        var words: [String] = getWords(fromText: text)
+        var words: [String] = getWords()
         
         var frequencyCount: [String: Int] = [:]
         
         while !words.isEmpty {
-            var count = 0
+            var count = 1
             let firstWord = words[0]
+            words.remove(at: 0)
             for word in words {
-                if word == firstWord {
+                if word.lowercased() == firstWord.lowercased() {
                     count += 1
                 }
             }
-            words = words.filter { $0 != firstWord}
+            words = words.filter { $0.lowercased() != firstWord.lowercased()}
             frequencyCount[firstWord] = count
         }
         
         completion(frequencyCount)
     }
     
-    func getLastChar(fromText text: String, dispatchGroup: DispatchGroup? = nil, completion: (String?) -> Void) {
+    
+    /// Get last character of member variable text
+    /// - Parameters:
+    ///   - dispatchGroup: Pass a dispatch group if you want to run this method in a group with other task asynchronously else pass nill or ignore it.
+    ///   - completion: Using this closure to return result as if Dispatch group passed we can leave from group after completion of task.
+    func getLastChar(dispatchGroup: DispatchGroup? = nil, completion: (String?) -> Void) {
         if let group = dispatchGroup { group.enter() }
         guard !text.isEmpty else { completion(""); return }
         let lastChar = text.last!
         completion(String(lastChar))
     }
     
-    func getPresentableText(fromText text: String, completion: @escaping(String) -> Void) {
+    
+    /// Prepares a presentable string from member variable text to show in textview according to business logic,
+    /// last character of text then every 10th characters and then occurences of every words.
+    /// - Parameter completion: Notify or return result after completion of task.
+    func getPresentableText(completion: @escaping(String) -> Void) {
         
         let dispatchGroup = DispatchGroup()
         var lastChar = ""
         var charsInEvery10th = [String]()
         var wordOccurences = [String: Int]()
         
-        getLastChar(fromText: text, dispatchGroup: dispatchGroup) { (char) in
+        getLastChar(dispatchGroup: dispatchGroup) { (char) in
             lastChar = char ?? ""
             dispatchGroup.leave()
         }
         
-        getCharacters(ofText: text, fromStartingIndex: 10, dispatchGroup: dispatchGroup) { (charArr) in
+        getCharacters(fromStartingIndex: 10, dispatchGroup: dispatchGroup) { (charArr) in
             charsInEvery10th = charArr
             dispatchGroup.leave()
         }
         
-        getWordOccurences(fromText: text, dispatchGroup: dispatchGroup) { (occurences) in
+        getWordOccurences(dispatchGroup: dispatchGroup) { (occurences) in
             wordOccurences = occurences
             dispatchGroup.leave()
         }
@@ -108,21 +130,4 @@ class MainVCViewModel {
         }
     }
     
-    func getData(completion: @escaping(String?) -> Void) {
-        
-        guard let url = URL(string: "https://bongobd.com/disclaimer") else {
-            completion(nil)
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            guard let lData = data, lData.count > 0 else {
-                completion(nil)
-                return
-            }
-            
-            completion(String(data: lData, encoding: .utf8))
-        }.resume()
-    }
 }

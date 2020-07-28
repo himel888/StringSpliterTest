@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainVC: UIViewController {
 
     @IBOutlet weak private var dataPresenterTxtView: UITextView!
     @IBOutlet weak private var loader: UIActivityIndicatorView!
@@ -42,8 +42,13 @@ class ViewController: UIViewController {
         
         loader.startAnimating()
         getData { (str) in
-            let vm = MainVCViewModel()
-            vm.getPresentableText(fromText: str ?? "") { (presentableText) in
+            guard let lStr = str, !lStr.isEmpty else {
+                self.dataPresenterTxtView.text = "No data fround"
+                return
+            }
+            
+            let vm = MainVCViewModel(lStr)
+            vm.getPresentableText() { (presentableText) in
                 DispatchQueue.main.async {
                     self.loader.stopAnimating()
                     self.dataPresenterTxtView.text = presentableText
